@@ -1,8 +1,11 @@
 
 
 from collections import OrderedDict
+from typing import Dict
+from flwr.common import NDArrays, Scalar
 import torch
 import flwr as fl
+from model import Net, train, test
 
 class FlowerClient(fl.client.NumPyClient):
     def __init__(self,
@@ -25,16 +28,22 @@ class FlowerClient(fl.client.NumPyClient):
         params_dict = zip(self.model.state_dicr().keys(), parameters)
         state_dict = OrderedDict({k: torch.Tensor(v) for k, v in params_dict})
         self.model.load_state_dict(state_dict, strict=True)
+        
+    def get_parameters(self, config: Dict[str, Scalar]):
+        return 
+        
 
     def fit(self, parameters, config):
         self.set_parameters(parameters)
         
         lr = config['lr']
         momentum = config['momentum']
+        epochs = config['local_epochs']
         
         optim = torch.optim.SGD(self.model.parameters(), lr=lr, momentum=momentum)
          
          
         #lokales Training
+        train(self.model,  self.trainloader, optim, epochs, self.device)
         
-        
+        return self.get_parameters(), len(self.trainloader), {}
