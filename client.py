@@ -50,8 +50,22 @@ class FlowerClient(fl.client.NumPyClient):
         return self.get_parameters(), len(self.trainloader), {}
     
     
-def evaluate(self, parameters: NDArrays, config: Dict[str, Scalar]):
+    def evaluate(self, parameters: NDArrays, config: Dict[str, Scalar]):
 
-    self.set_parameters(parameters)
-    loss, accuracy = test(self.model, self.valloader, self.device)
-    return float(loss), len(self.valloader), {'accuracy': accuracy}
+        self.set_parameters(parameters)
+        loss, accuracy = test(self.model, self.valloader, self.device)
+        return float(loss), len(self.valloader), {'accuracy': accuracy}
+
+
+
+def generate_client_fn(trainloaders, valloaders, num_classes):
+
+    def client_fn(cid: str):
+        return FlowerClient(trainloader=train.loaders[int(cid)],
+                            validationloader=valloaders[int(cid)],
+                            num_classes=num_classes,)
+
+
+
+
+    return client_fn

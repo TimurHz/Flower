@@ -3,6 +3,7 @@
 num_rounds: 10
 num_clients: 100
 batch_size: 20
+num_classes: 10
 config_fit: 
   lr: 0.01
   momentun: 0.9
