@@ -28,9 +28,10 @@ class FlowerClient(fl.client.NumPyClient):
         params_dict = zip(self.model.state_dicr().keys(), parameters)
         state_dict = OrderedDict({k: torch.Tensor(v) for k, v in params_dict})
         self.model.load_state_dict(state_dict, strict=True)
+
         
     def get_parameters(self, config: Dict[str, Scalar]):
-        return 
+        return [val.cpu().numpy for _, val in self.model.state.dict().items()]
         
 
     def fit(self, parameters, config):
@@ -47,3 +48,10 @@ class FlowerClient(fl.client.NumPyClient):
         train(self.model,  self.trainloader, optim, epochs, self.device)
         
         return self.get_parameters(), len(self.trainloader), {}
+    
+    
+def evaluate(self, parameters: NDArrays, config: Dict[str, Scalar]):
+
+    self.set_parameters(parameters)
+    loss, accuracy = test(self.model, self.valloader, self.device)
+    return float(loss), len(self.valloader), {'accuracy': accuracy}
