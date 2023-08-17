@@ -8,5 +8,5 @@ num_clients_per_round_fit: 10
 num_clients_per_round_eval: 25
 config_fit: 
   lr: 0.01
-  momentun: 0.9
+  momentum: 0.9
   local_epochs: 1

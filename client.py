@@ -25,13 +25,14 @@ class FlowerClient(fl.client.NumPyClient):
     
     def set_parameters(self, parameters):
         
-        params_dict = zip(self.model.state_dicr().keys(), parameters)
+        params_dict = zip(self.model.state_dict().keys(), parameters)
         state_dict = OrderedDict({k: torch.Tensor(v) for k, v in params_dict})
         self.model.load_state_dict(state_dict, strict=True)
 
         
     def get_parameters(self, config: Dict[str, Scalar]):
-        return [val.cpu().numpy for _, val in self.model.state.dict().items()]
+        return [val.cpu().numpy() for _, val in self.model.state_dict().items()]
+
         
 
     def fit(self, parameters, config):
@@ -47,7 +48,7 @@ class FlowerClient(fl.client.NumPyClient):
         #lokales Training
         train(self.model,  self.trainloader, optim, epochs, self.device)
         
-        return self.get_parameters(), len(self.trainloader), {}
+        return self.get_parameters({}), len(self.trainloader), {}
     
     
     def evaluate(self, parameters: NDArrays, config: Dict[str, Scalar]):
@@ -61,7 +62,7 @@ class FlowerClient(fl.client.NumPyClient):
 def generate_client_fn(trainloaders, valloaders, num_classes):
 
     def client_fn(cid: str):
-        return FlowerClient(trainloader=train.loaders[int(cid)],
+        return FlowerClient(trainloader=trainloaders[int(cid)],
                             validationloader=valloaders[int(cid)],
                             num_classes=num_classes,)
 
