@@ -1,13 +1,11 @@
 from collections import OrderedDict
 from omegaconf import DictConfig, OmegaConf
 from model import Net, test
-import torch 
+import torch
 from hydra.utils import instantiate
 
 
-
 def get_on_fit_config(config: DictConfig):
-    
     def fit_config_fn(server_round: int):
         return {
             "lr": config.lr,
@@ -18,10 +16,7 @@ def get_on_fit_config(config: DictConfig):
     return fit_config_fn
 
 
-
-
 def get_eval_fn(num_classes: int, testloader):
-
     def evaluate_fn(server_round: int, parameters, config):
         model = Net(num_classes)
 
