@@ -34,10 +34,10 @@ def main(cfg: DictConfig):
         num_clients=cfg.num_clients,
         config=fl.server.ServerConfig(num_rounds=cfg.num_rounds),
         strategy=strategy,
-        client_resources={
-            'num_cpus': 2,      # Wie viele cpus sollte ein client haben
-            'num_gpus': 0     # Wie viel des vrams die clients zur verfügung haben. Für =1 kann nur 1 client gleichz. laufen
-        }
+        #client_resources={
+        #    'num_cpus': 2,      # Wie viele cpus sollte ein client haben
+        #    'num_gpus': 0     # Wie viel des vrams die clients zur verfügung haben. Für =1 kann nur 1 client gleichz. laufen
+        #}
     )
 
     save_path = HydraConfig.get().runtime.output_dir
