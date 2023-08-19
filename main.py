@@ -10,6 +10,9 @@ from dataset import prepare_dataset
 from pathlib import Path
 
 
+
+
+
 @hydra.main(config_path="conf", config_name="base", version_base=None)
 def main(cfg: DictConfig):
     # print config
