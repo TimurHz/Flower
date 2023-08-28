@@ -3,6 +3,7 @@ from omegaconf import DictConfig, OmegaConf
 from model import Net, test
 import torch
 from hydra.utils import instantiate
+import numpy
 
 
 def get_on_fit_config(config: DictConfig):
