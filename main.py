@@ -5,10 +5,13 @@ from hydra.core.hydra_config import HydraConfig
 from omegaconf import DictConfig, OmegaConf
 from client import generate_client_fn
 import flwr as fl
-from server import get_on_fit_config, get_eval_fn
+from server import get_on_fit_config, get_eval_fn, globaleval
 from dataset import prepare_dataset
 from pathlib import Path
 
+from model import Net, test
+import torch
+from collections import OrderedDict
 
 
 
@@ -31,7 +34,8 @@ def main(cfg: DictConfig):
         min_available_clients=cfg.num_clients,
         on_fit_config_fn=get_on_fit_config(cfg.config_fit),
         evaluate_fn=get_eval_fn(cfg.num_classes, testloader))
-
+    
+    
     history = fl.simulation.start_simulation(
         client_fn=client_fn,
         num_clients=cfg.num_clients,
@@ -42,6 +46,11 @@ def main(cfg: DictConfig):
         #    'num_gpus': 0     # Wie viel des vrams die clients zur verfügung haben. Für =1 kann nur 1 client gleichz. laufen
         #}
     )
+
+    print("------------------------")
+    
+    
+
 
     save_path = HydraConfig.get().runtime.output_dir
     result_path = Path(save_path) / 'results.pkl'

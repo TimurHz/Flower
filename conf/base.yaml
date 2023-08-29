@@ -1,5 +1,6 @@
 ---
 
+model: 1
 num_rounds: 10
 num_clients: 10
 batch_size: 32
